@@ -1,134 +1,295 @@
-# Estructura del proyecto
+# 🏛️ AEAT Procurement Analytics
 
-## Código fuente
-
-### data_collector.py
-
-Script encargado de:
-
-- Descargar datos abiertos de la Plataforma de Contratación del Sector Público (PLACSP).
-- Extraer los ficheros ATOM publicados por la plataforma.
-- Filtrar únicamente las licitaciones relacionadas con la Agencia Estatal de Administración Tributaria (AEAT).
-- Procesar y normalizar los datos.
-- Generar el conjunto de datos consolidado utilizado por el dashboard.
-
-### data_visualization.html
-
-Aplicación web de análisis y visualización.
-
-Permite:
-
-- Explorar las licitaciones de la AEAT.
-- Analizar la evolución temporal del gasto.
-- Visualizar las principales categorías de contratación.
-- Identificar órganos de contratación.
-- Revisar contratos relevantes.
-- Detectar posibles anomalías.
-- Consultar cada expediente con enlace directo a la Plataforma de Contratación del Sector Público.
+> Análisis de las licitaciones públicas de la Agencia Estatal de Administración Tributaria (AEAT) utilizando datos abiertos de la Plataforma de Contratación del Sector Público (PLACSP).
 
 ---
 
-## Dataset generado
+# 📂 Estructura del proyecto
 
-### data_clean.xlsx
-
-Base de datos consolidada obtenida a partir de los datos abiertos de la PLACSP.
-
-Contiene información estructurada de las licitaciones de la Agencia Estatal de Administración Tributaria entre 2012 y 2026.
-
-Campos principales:
-
-- Año fuente
-- Expediente
-- Objeto del contrato
-- Órgano de contratación
-- Importe sin IVA
-- Importe con IVA
-- Tipo de contrato
-- Procedimiento
-- Código CPV
-- Fecha de publicación
-- Fecha de actualización
-- URL oficial del expediente
+```text
+📦 Proyecto
+├── 📄 README.md
+├── 🐍 data_collector.py
+├── 📊 data_clean.xlsx
+├── 🌐 data_visualization.html
+│
+├── 📚 ManualRenta2025Parte1_es_es.pdf
+├── 📚 ManualRenta2025Parte2_es_es.pdf
+├── 📚 Manual_IVA_2025.pdf
+├── 📚 Manual_Sociedades_2025.pdf
+└── 📚 ManualPatrimonio2025_es_es.pdf
+```
 
 ---
 
-# Fuentes documentales utilizadas
+# 🐍 Data Collector
 
-Además de los datos abiertos obtenidos de la Plataforma de Contratación del Sector Público, se han utilizado documentos oficiales de la Agencia Estatal de Administración Tributaria (AEAT) y de la Agencia Tributaria Española para contextualizar y validar los análisis.
+## 📄 Fichero
 
-## Manuales tributarios
+```text
+data_collector.py
+```
 
-### ManualRenta2025Parte1_es_es.pdf
+## 🎯 Objetivo
 
-Manual oficial del Impuesto sobre la Renta de las Personas Físicas (IRPF) 2025.
+Automatizar la descarga y procesamiento de licitaciones AEAT desde la PLACSP.
 
-Utilizado para:
+## ⚙️ Funcionalidades
 
-- Comprender los procesos de atención al contribuyente.
-- Analizar servicios de asistencia tributaria.
-- Contextualizar contratos relacionados con campañas de Renta.
+✅ Descarga datos históricos (2012-2026)
 
-### ManualRenta2025Parte2_es_es.pdf
+✅ Extrae ficheros ATOM
 
-Segunda parte del Manual de IRPF 2025.
+✅ Filtra únicamente expedientes AEAT
 
-Utilizado para:
+✅ Normaliza datos
 
-- Identificar necesidades funcionales y operativas de la AEAT.
-- Comprender procedimientos administrativos y servicios prestados al ciudadano.
+✅ Elimina ruido y registros innecesarios
 
-### Manual_IVA_2025.pdf
+✅ Genera dataset consolidado
 
-Manual oficial del Impuesto sobre el Valor Añadido (IVA).
-
-Utilizado para:
-
-- Contextualizar procesos operativos gestionados por la Agencia Tributaria.
-- Analizar posibles necesidades de sistemas y herramientas informáticas asociadas.
-
-### Manual_Sociedades_2025.pdf
-
-Manual oficial del Impuesto sobre Sociedades.
-
-Utilizado para:
-
-- Entender procesos de gestión tributaria empresarial.
-- Relacionar contratos tecnológicos con necesidades operativas de la AEAT.
-
-### ManualPatrimonio2025_es_es.pdf
-
-Manual oficial del Impuesto sobre el Patrimonio.
-
-Utilizado como referencia para comprender servicios tributarios específicos y su posible impacto en los sistemas de información de la Agencia Tributaria.
+✅ Prepara la información para el dashboard
 
 ---
 
-# Origen de los datos
+# 📊 Dataset
 
-## Plataforma de Contratación del Sector Público (PLACSP)
+## 📄 Fichero
 
-Fuente principal:
+```text
+data_clean.xlsx
+```
 
-https://contrataciondelestado.es
+## 📈 Contenido
 
-Los datos proceden de los ficheros ATOM publicados por la Plataforma de Contratación del Sector Público, que contienen información oficial sobre:
+Contiene:
 
-- Licitaciones
-- Adjudicaciones
-- Modificaciones
+| 📋 Campo |
+|-----------|
+| Año |
+| Expediente |
+| Objeto |
+| Órgano de contratación |
+| Importe sin IVA |
+| Importe con IVA |
+| Procedimiento |
+| Tipo de contrato |
+| Código CPV |
+| Fecha publicación |
+| Fecha actualización |
+| URL oficial |
+
+---
+
+## 📦 Volumen de datos
+
+### 📄 Publicaciones procesadas
+
+```text
+3.184 registros
+```
+
+### 🏷️ Licitaciones únicas
+
+```text
+746 expedientes
+```
+
+### 💰 Importe total analizado
+
+```text
+1.155.927.992 €
+```
+
+Más de:
+
+```text
+1.155 millones €
+```
+
+---
+
+# 🌐 Dashboard
+
+## 📄 Fichero
+
+```text
+data_visualization.html
+```
+
+## 🎯 Objetivo
+
+Convertir los datos brutos en información útil y visual.
+
+---
+
+## 📈 ¿Qué se puede visualizar?
+
+### 🗓️ Evolución anual
+
+- Importe contratado por año
+- Número de expedientes
+- Tendencias históricas
+
+---
+
+### 💰 Distribución del gasto
+
+- 💻 Tecnología
+- 📡 Telecomunicaciones
+- 🚁 Flota aérea
+- 🚢 Flota marítima
+- 🏗️ Obras
+- 🧹 Limpieza
+- 🔒 Seguridad
+
+---
+
+### 🏢 Órganos de contratación
+
+- Dirección General (SSCC)
+- Cataluña
+- Castilla-La Mancha
+- Murcia
+
+---
+
+### 📑 Procedimientos
+
+- Abierto
+- Abierto simplificado
+- Negociado
+- Acuerdo marco
+
+---
+
+### 🏆 Grandes contratos
+
+Identifica automáticamente:
+
+- Contratos más caros
+- Proyectos estratégicos
+- Principales inversiones
+
+Ejemplos:
+
+```text
+💻 Mainframe IBM
+🏗️ Nueva sede Valencia
+🏢 Nuevo DIT Madrid
+📡 Telecomunicaciones AEAT
+```
+
+---
+
+### 📉 Evolución de costes
+
+Seguimiento de contratos recurrentes:
+
+- IBM Mainframe
+- Telecomunicaciones
+- Atención telefónica
+- Limpieza
+- Seguridad
+- Motores MTU
+
+---
+
+### 🚨 Detección de anomalías
+
+El dashboard resalta automáticamente:
+
+✅ Posibles duplicidades
+
+✅ Importes repetidos
+
+✅ Contratos cercanos a umbrales legales
+
+✅ Expedientes con demasiadas modificaciones
+
+✅ Patrones de contratación relevantes
+
+---
+
+### 🔍 Buscador avanzado
+
+Permite filtrar por:
+
+```text
+🔎 Texto
+🏢 Órgano
+📑 Procedimiento
+📂 Categoría
+📆 Año
+```
+
+Con acceso directo al expediente oficial.
+
+---
+
+# 📚 Documentación utilizada
+
+Los siguientes documentos oficiales se utilizan como referencia documental para comprender la actividad y los servicios gestionados por la Agencia Tributaria:
+
+## 👤 IRPF
+
+📄 ManualRenta2025Parte1_es_es.pdf
+
+📄 ManualRenta2025Parte2_es_es.pdf
+
+---
+
+## 💶 IVA
+
+📄 Manual_IVA_2025.pdf
+
+---
+
+## 🏢 Impuesto sobre Sociedades
+
+📄 Manual_Sociedades_2025.pdf
+
+---
+
+## 🏠 Impuesto sobre el Patrimonio
+
+📄 ManualPatrimonio2025_es_es.pdf
+
+---
+
+# 🌍 Fuente de datos
+
+## Plataforma de Contratación del Sector Público
+
+🔗 https://contrataciondelestado.es
+
+Los datos proceden de:
+
+- Licitaciones públicas
 - Actualizaciones de expedientes
-
-La extracción realizada por `data_collector.py` filtra exclusivamente aquellos expedientes relacionados con la Agencia Estatal de Administración Tributaria (AEAT).
+- Anuncios de contratación
+- Procedimientos de adjudicación
 
 ---
 
-# Resultado final
+# 🚀 Resultado final
 
 El proyecto transforma datos abiertos de contratación pública en una plataforma de análisis compuesta por:
 
-- `data_collector.py`: recopilación y tratamiento de datos
-- `data_clean.xlsx`: dataset consolidado
-- `data_visualization.html`: cuadro de mando interactivo
+```text
+🐍 data_collector.py
+       ↓
+📊 data_clean.xlsx
+       ↓
+🌐 data_visualization.html
+```
 
-Todo ello apoyado en documentación oficial tributaria de la AEAT correspondiente al ejercicio 2025.
+Permitiendo analizar más de:
+
+```text
+💰 1.155 millones de euros
+📋 746 licitaciones
+📅 2012-2026
+```
+
+de contratación pública de la Agencia Estatal de Administración Tributaria.
