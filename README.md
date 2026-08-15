@@ -1,294 +1,134 @@
-# PLACSP - Exportador AEAT
+# Estructura del proyecto
 
-Este script descarga los datos abiertos de la Plataforma de Contratación del Sector Público (PLACSP), filtra las licitaciones relacionadas con la Agencia Tributaria y genera un único fichero Excel con una hoja por año.
+## Código fuente
 
----
+### data_collector.py
 
-# Parámetros de búsqueda
+Script encargado de:
 
-## Años a consultar
+- Descargar datos abiertos de la Plataforma de Contratación del Sector Público (PLACSP).
+- Extraer los ficheros ATOM publicados por la plataforma.
+- Filtrar únicamente las licitaciones relacionadas con la Agencia Estatal de Administración Tributaria (AEAT).
+- Procesar y normalizar los datos.
+- Generar el conjunto de datos consolidado utilizado por el dashboard.
 
-Define el rango de años a descargar.
+### data_visualization.html
 
-```python
-YEARS = range(2012, 2027)
-```
+Aplicación web de análisis y visualización.
 
-### Ejemplos
+Permite:
 
-Solo 2026:
-
-```python
-YEARS = [2026]
-```
-
-Últimos 5 años:
-
-```python
-YEARS = range(2022, 2027)
-```
-
-Años concretos:
-
-```python
-YEARS = [2018, 2020, 2023, 2026]
-```
+- Explorar las licitaciones de la AEAT.
+- Analizar la evolución temporal del gasto.
+- Visualizar las principales categorías de contratación.
+- Identificar órganos de contratación.
+- Revisar contratos relevantes.
+- Detectar posibles anomalías.
+- Consultar cada expediente con enlace directo a la Plataforma de Contratación del Sector Público.
 
 ---
 
-## Filtro por órgano de contratación
+## Dataset generado
 
-El filtro principal se realiza sobre el campo **Órgano de contratación**.
+### data_clean.xlsx
 
-```python
-PATRONES_ORGANO = [
-    r"Agencia Estatal de Administración Tributaria",
-    r"\bAEAT\b",
-    r"Departamento de Informática Tributaria",
-    r"Delegación Especial de la AEAT",
-]
-```
+Base de datos consolidada obtenida a partir de los datos abiertos de la PLACSP.
 
-### Añadir nuevos organismos
+Contiene información estructurada de las licitaciones de la Agencia Estatal de Administración Tributaria entre 2012 y 2026.
 
-Por ejemplo:
+Campos principales:
 
-```python
-PATRONES_ORGANO = [
-    r"Agencia Estatal de Administración Tributaria",
-    r"\bAEAT\b",
-    r"Departamento de Informática Tributaria",
-    r"Delegación Especial de la AEAT",
-    r"Dirección General del Catastro",
-]
-```
+- Año fuente
+- Expediente
+- Objeto del contrato
+- Órgano de contratación
+- Importe sin IVA
+- Importe con IVA
+- Tipo de contrato
+- Procedimiento
+- Código CPV
+- Fecha de publicación
+- Fecha de actualización
+- URL oficial del expediente
 
 ---
 
-## Validación SSL
+# Fuentes documentales utilizadas
 
-Permite activar o desactivar la validación de certificados HTTPS.
+Además de los datos abiertos obtenidos de la Plataforma de Contratación del Sector Público, se han utilizado documentos oficiales de la Agencia Estatal de Administración Tributaria (AEAT) y de la Agencia Tributaria Española para contextualizar y validar los análisis.
 
-```python
-VERIFY_SSL = True
-```
+## Manuales tributarios
 
-### Desactivar SSL
+### ManualRenta2025Parte1_es_es.pdf
 
-Solo si se producen errores de certificado:
+Manual oficial del Impuesto sobre la Renta de las Personas Físicas (IRPF) 2025.
 
-```python
-VERIFY_SSL = False
-```
+Utilizado para:
 
----
+- Comprender los procesos de atención al contribuyente.
+- Analizar servicios de asistencia tributaria.
+- Contextualizar contratos relacionados con campañas de Renta.
 
-# Ubicación de los archivos
+### ManualRenta2025Parte2_es_es.pdf
 
-## Carpeta principal
+Segunda parte del Manual de IRPF 2025.
 
-```python
-WORK_DIR = DOWNLOADS_DIR / "PLACSP_AEAT"
-```
+Utilizado para:
 
-Resultado:
+- Identificar necesidades funcionales y operativas de la AEAT.
+- Comprender procedimientos administrativos y servicios prestados al ciudadano.
 
-```text
-C:\Users\<usuario>\Downloads\PLACSP_AEAT
-```
+### Manual_IVA_2025.pdf
 
----
+Manual oficial del Impuesto sobre el Valor Añadido (IVA).
 
-## ZIP descargados
+Utilizado para:
 
-```python
-ZIP_DIR = WORK_DIR / "zips_descargados"
-```
+- Contextualizar procesos operativos gestionados por la Agencia Tributaria.
+- Analizar posibles necesidades de sistemas y herramientas informáticas asociadas.
 
-Contiene:
+### Manual_Sociedades_2025.pdf
 
-```text
-licitaciones_2012.zip
-licitaciones_2013.zip
-...
-licitaciones_2026.zip
-```
+Manual oficial del Impuesto sobre Sociedades.
 
----
+Utilizado para:
 
-## Ficheros ATOM extraídos
+- Entender procesos de gestión tributaria empresarial.
+- Relacionar contratos tecnológicos con necesidades operativas de la AEAT.
 
-```python
-ATOM_DIR = WORK_DIR / "atom_extraidos"
-```
+### ManualPatrimonio2025_es_es.pdf
 
-Contiene:
+Manual oficial del Impuesto sobre el Patrimonio.
 
-```text
-atom_extraidos
- ├─ 2012
- ├─ 2013
- ├─ 2014
- ...
- └─ 2026
-```
-
-Los ficheros ATOM se conservan para evitar volver a descomprimir los ZIP en futuras ejecuciones.
+Utilizado como referencia para comprender servicios tributarios específicos y su posible impacto en los sistemas de información de la Agencia Tributaria.
 
 ---
 
-## Excel generado
+# Origen de los datos
 
-```python
-OUTPUT_FILE = WORK_DIR / "licitaciones_aeat_2012_2026.xlsx"
-```
+## Plataforma de Contratación del Sector Público (PLACSP)
 
-Resultado:
+Fuente principal:
 
-```text
-C:\Users\<usuario>\Downloads\PLACSP_AEAT\licitaciones_aeat_2012_2026.xlsx
-```
+https://contrataciondelestado.es
 
----
+Los datos proceden de los ficheros ATOM publicados por la Plataforma de Contratación del Sector Público, que contienen información oficial sobre:
 
-# Campos exportados
+- Licitaciones
+- Adjudicaciones
+- Modificaciones
+- Actualizaciones de expedientes
 
-El Excel contiene las siguientes columnas:
-
-```python
-COLUMNAS = [
-    "Año fuente",
-    "Expediente",
-    "Objeto",
-    "Órgano de contratación",
-    "Coincidencia filtro",
-    "Estado",
-    "Importe sin IVA",
-    "Importe con IVA",
-    "Tipo de contrato",
-    "Procedimiento",
-    "CPV",
-    "Fecha publicación",
-    "Fecha actualización",
-    "URL",
-]
-```
+La extracción realizada por `data_collector.py` filtra exclusivamente aquellos expedientes relacionados con la Agencia Estatal de Administración Tributaria (AEAT).
 
 ---
 
-# Formato del Excel
+# Resultado final
 
-## Hojas
+El proyecto transforma datos abiertos de contratación pública en una plataforma de análisis compuesta por:
 
-Se crea una worksheet independiente para cada año.
+- `data_collector.py`: recopilación y tratamiento de datos
+- `data_clean.xlsx`: dataset consolidado
+- `data_visualization.html`: cuadro de mando interactivo
 
-Ejemplo:
-
-```text
-2012
-2013
-2014
-...
-2026
-```
-
----
-
-## Tipos de datos
-
-### Importes
-
-```text
-12.345,67 €
-```
-
-Se almacenan como números Excel.
-
----
-
-### Fechas
-
-```text
-31-12-2025
-```
-
-Formato:
-
-```text
-DD-MM-AAAA
-```
-
----
-
-### CPV
-
-Se almacena como texto para conservar ceros iniciales.
-
----
-
-# Reutilización de datos
-
-## ZIP ya descargado
-
-Si existe:
-
-```text
-zips_descargados\licitaciones_2025.zip
-```
-
-el script lo reutiliza y no vuelve a descargarlo.
-
----
-
-## ATOM ya extraído
-
-Si existe:
-
-```text
-atom_extraidos\2025
-```
-
-el script reutiliza los ficheros extraídos y no vuelve a descomprimir el ZIP.
-
----
-
-# Cómo ampliar la búsqueda
-
-## Buscar varios organismos
-
-```python
-PATRONES_ORGANO = [
-    r"AEAT",
-    r"Agencia Tributaria",
-    r"Dirección General del Catastro",
-    r"Tesoro Público",
-]
-```
-
----
-
-## Buscar cualquier contrato de Hacienda
-
-```python
-PATRONES_ORGANO = [
-    r"Hacienda",
-    r"Tributaria",
-    r"AEAT",
-]
-```
-
----
-
-# Salida esperada
-
-Al finalizar se obtiene:
-
-```text
-Downloads
- └─ PLACSP_AEAT
-     ├─ licitaciones_aeat_2012_2026.xlsx
-     ├─ zips_descargados
-     └─ atom_extraidos
-```
-
-El Excel contiene únicamente los expedientes cuyo órgano de contratación coincide con alguno de los patrones definidos en `PATRONES_ORGANO`.
+Todo ello apoyado en documentación oficial tributaria de la AEAT correspondiente al ejercicio 2025.
