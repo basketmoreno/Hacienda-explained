@@ -1,4 +1,5 @@
 import re
+import os
 import zipfile
 import shutil
 import requests
@@ -21,20 +22,29 @@ VERIFY_SSL = True
 
 BASE_URL = "https://contrataciondelsectorpublico.gob.es"
 
-# Carpeta Downloads del usuario
 DOWNLOADS_DIR = Path.home() / "Downloads"
 
-# Carpeta raíz del proceso
 WORK_DIR = DOWNLOADS_DIR / "PLACSP_AEAT"
 
-# Carpeta donde se guardan los ZIPs descargados
 ZIP_DIR = WORK_DIR / "zips_descargados"
 
-# Carpeta donde se conservan los ficheros .atom / .xml extraídos
 ATOM_DIR = WORK_DIR / "atom_extraidos"
 
-# Excel final
 OUTPUT_FILE = WORK_DIR / "licitaciones_aeat_2012_2026.xlsx"
+
+RAW_OUTPUT_FILE = WORK_DIR / "_raw_licitaciones_aeat_2012_2026.xlsx"
+
+# Número máximo de descargas simultáneas
+# Límite agresivo: hasta 12 descargas simultáneas, sin superar el número de años
+DOWNLOAD_WORKERS = min(len(list(YEARS)), 12)
+
+# Número máximo de ficheros ATOM procesados en paralelo
+# Usa el doble de núcleos lógicos disponibles, con mínimo de 4 workers
+PROCESS_WORKERS = max(4, (os.cpu_count() or 4) * 2)
+
+# Tamaño de la cola de escritura hacia Excel
+# Aumentado para reducir bloqueos entre workers de procesado y writer
+QUEUE_MAXSIZE = 50000
 
 PATRONES_ORGANO = [
     r"Agencia Estatal de Administración Tributaria",
